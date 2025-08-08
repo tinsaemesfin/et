@@ -1,8 +1,11 @@
 @import "tailwindcss";
+@import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --color-brand: #1273eb; /* Ethiopian blue-inspired */
+  --header-bg: #ffffff;
 }
 
 @theme inline {
@@ -16,11 +19,40 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --header-bg: #000000;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans, Arial), "Noto Sans Ethiopic", system-ui,
+    -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
+    "Segoe UI Emoji";
+}
+
+/* Ensure all obvious interactive elements show a pointer */
+button, [role="button"], a, select, summary { cursor: pointer; }
+
+/* Mobile-first utility tweaks */
+.prose { max-width: 65ch; }
+.container { width: 100%; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
+
+/* Reduce motion for low-end devices */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/* Subtle skeleton shimmer */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(90deg, rgba(0,0,0,0.06), rgba(0,0,0,0.12), rgba(0,0,0,0.06));
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
