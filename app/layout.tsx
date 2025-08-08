@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import ThemeToggle from "@/components/ThemeToggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         {/* Leaflet CSS in head to ensure styles load before map mounts */}
         <link
@@ -35,11 +34,12 @@ export default function RootLayout({
           integrity="sha256-o9N1j8MkfF2zG32KXW9E4nSFB7xZf1su1t7qtJ6wG6E="
           crossOrigin=""
         />
+        <meta name="color-scheme" content="dark" />
         {/* Initialize saved theme before hydration to avoid flash */}
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "(function(){try{var t=localStorage.getItem('theme');if(t==='dark'){document.documentElement.classList.add('dark');document.documentElement.classList.remove('light');}else if(t==='light'){document.documentElement.classList.add('light');document.documentElement.classList.remove('dark');}}catch(e){}})();",
+              "(function(){try{document.documentElement.classList.add('dark');document.documentElement.classList.remove('light');localStorage.setItem('theme','dark');}catch(e){}})();",
           }}
         />
       </head>
@@ -58,8 +58,6 @@ export default function RootLayout({
                   <span className="w-1.5 h-1.5 rounded-full bg-[--color-brand] opacity-0 group-hover:opacity-100" />
                   About
                 </Link>
-                
-                <div className="ml-1 sm:ml-2"><ThemeToggle /></div>
               </nav>
             </div>
           </header>
