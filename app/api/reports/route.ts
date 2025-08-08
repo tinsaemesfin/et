@@ -18,8 +18,7 @@ const ReportSchema = z.object({
     .regex(/^0\d{9}$/i, { message: "Phone must be 10 digits and start with 0" })
     .optional()
     .nullable(),
-  lat: z.number().gte(-90).lte(90).optional().nullable(),
-  lng: z.number().gte(-180).lte(180).optional().nullable(),
+
 });
 
 type Report = z.infer<typeof ReportSchema> & { id: string; createdAt: string };
@@ -31,7 +30,7 @@ export async function GET() {
   const sql = getSql();
   if (sql) {
     await ensureTables();
-    const rows = (await sql`select id, type, city, subcity, neighborhood, note, contact, lat, lng, created_at from reports order by created_at desc limit 100`) as Array<{
+    const rows = (await sql`select id, type, city, subcity, neighborhood, note, contact, created_at from reports order by created_at desc limit 100`) as Array<{
       id: string;
       type: "power" | "water";
       city: string;
@@ -39,8 +38,6 @@ export async function GET() {
       neighborhood: string | null;
       note: string | null;
       contact: string | null;
-      lat: number | null;
-      lng: number | null;
       created_at: string;
     }>;
     const list: Report[] = rows.map((r) => ({
@@ -51,8 +48,7 @@ export async function GET() {
       neighborhood: r.neighborhood ?? undefined,
       note: r.note ?? undefined,
       contact: r.contact ?? undefined,
-      lat: r.lat ?? undefined,
-      lng: r.lng ?? undefined,
+
       createdAt: new Date(r.created_at).toISOString(),
     }));
     return NextResponse.json({ ok: true, data: list });
@@ -104,8 +100,8 @@ export async function POST(req: NextRequest) {
   if (sql) {
     await ensureTables();
     await sql`
-      insert into reports (id, type, city, subcity, neighborhood, note, contact, lat, lng, created_at)
-      values (${item.id}, ${item.type}, ${item.city}, ${item.subcity ?? null}, ${item.neighborhood ?? null}, ${item.note ?? null}, ${item.contact ?? null}, ${item.lat ?? null}, ${item.lng ?? null}, ${item.createdAt}::timestamptz)
+      insert into reports (id, type, city, subcity, neighborhood, note, contact, created_at)
+      values (${item.id}, ${item.type}, ${item.city}, ${item.subcity ?? null}, ${item.neighborhood ?? null}, ${item.note ?? null}, ${item.contact ?? null}, ${item.createdAt}::timestamptz)
     `;
   } else {
     memoryStore.push(item);

@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
 
 :root {
   --background: #ffffff;
@@ -21,6 +20,19 @@
     --foreground: #ededed;
     --header-bg: #000000;
   }
+}
+
+/* Explicit theme classes override media preference */
+.light {
+  --background: #ffffff;
+  --foreground: #171717;
+  --header-bg: #ffffff;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --header-bg: #000000;
 }
 
 body {
@@ -55,4 +67,54 @@ button, [role="button"], a, select, summary { cursor: pointer; }
 @keyframes shimmer {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
+}
+
+/* Leaflet container default height safety in case parent fails to set it */
+.leaflet-container {
+  min-height: 12rem; /* ~192px */
+}
+
+/* Fix: Tailwind's global `img { max-width: 100% }` breaks Leaflet tile sizing.
+   Ensure Leaflet images and tiles are never constrained, preventing black/blank quadrants. */
+.leaflet-container img,
+.leaflet-container .leaflet-tile,
+.leaflet-container .leaflet-marker-icon,
+.leaflet-container .leaflet-marker-shadow {
+  max-width: none !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+/* Additional fixes for map rendering issues */
+.leaflet-container {
+  background: transparent !important;
+}
+
+/* Ensure proper tile loading and prevent flickering */
+.leaflet-tile {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimize-contrast;
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
+}
+
+/* Fix for dragging issues - ensure proper pointer events */
+.leaflet-container .leaflet-control-container {
+  pointer-events: auto !important;
+}
+
+.leaflet-container .leaflet-pane {
+  pointer-events: auto !important;
+}
+
+/* Prevent map from going black during interactions */
+.leaflet-container .leaflet-tile-pane {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Hint browsers to optimize transforms during pans/zooms to avoid flashing */
+.leaflet-container .leaflet-pane,
+.leaflet-container .leaflet-tile {
+  will-change: transform;
 }

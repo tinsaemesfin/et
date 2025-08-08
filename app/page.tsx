@@ -6,7 +6,7 @@ import { Input, Textarea, labelClasses } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
 import { Segmented } from "@/components/ui/Segmented";
 import { ClockIcon, MapPinIcon, PhoneIcon, PowerIcon, WaterIcon, SendIcon } from "@/components/icons";
-import { MapPicker } from "@/components/MapPicker";
+
 
 type OutageType = "power" | "water";
 type Report = {
@@ -40,8 +40,7 @@ export default function Home() {
   const [note, setNote] = useState("");
   const [contact, setContact] = useState("");
   const [contactError, setContactError] = useState<string | null>(null);
-  const [lat, setLat] = useState<number | null>(null);
-  const [lng, setLng] = useState<number | null>(null);
+
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [reports, setReports] = useState<Report[]>([]);
@@ -73,7 +72,7 @@ export default function Home() {
         setContactError(null);
       }
 
-      const payload = { type, city, subcity, neighborhood, note, contact, lat, lng };
+      const payload = { type, city, subcity, neighborhood, note, contact: contact || null };
       const res = await fetch(`/api/reports`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -87,8 +86,7 @@ export default function Home() {
         setNeighborhood("");
         setNote("");
         setContact("");
-        setLat(null);
-        setLng(null);
+
         fetchReports();
       } else {
         setMessage(json.error);
@@ -152,17 +150,7 @@ export default function Home() {
                   <Input required value={city} onChange={(e)=>setCity(e.target.value)} placeholder={t.city} className="pl-8" />
                 </div>
               </div>
-              <div>
-                <label className={labelClasses}>{t.location}</label>
-                <div className="h-56 rounded-md overflow-hidden border border-black/10 dark:border-white/15">
-                  <MapPicker lat={lat} lng={lng} onPick={(a,b)=>{setLat(a); setLng(b);}} markers={reports.filter(r=>r.lat && r.lng).map(r=>({ lat: r.lat!, lng: r.lng!, type: r.type, key: r.id }))} />
-                </div>
-                {(lat && lng) ? (
-                  <p className="text-[11px] opacity-70 mt-1">{lat.toFixed(5)}, {lng.toFixed(5)}</p>
-                ) : (
-                  <p className="text-[11px] opacity-70 mt-1">{t.tapMap}</p>
-                )}
-              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className={labelClasses}>{t.subcity}</label>
@@ -248,7 +236,7 @@ const en = {
   power: "Power",
   water: "Water",
   city: "City",
-  location: "Location",
+
   subcity: "Sub-city",
   neighborhood: "Neighborhood",
   phoneOptional: "Phone (optional)",
@@ -263,7 +251,6 @@ const en = {
   contact: "Contact",
   total: "total",
   phoneError: "Phone must be 10 digits and start with 0",
-  tapMap: "Tap on the map to set the location",
 };
 
 const am = {
@@ -276,7 +263,7 @@ const am = {
   power: "መብራት",
   water: "ውሃ",
   city: "ከተማ",
-  location: "አቅጣጫ",
+
   subcity: "ንዑስ ከተማ",
   neighborhood: "አድራሻ/አቅራቢያ",
   phoneOptional: "ስልክ (አማራጭ)",
@@ -291,5 +278,4 @@ const am = {
   contact: "ስልክ",
   total: "ጠቅላላ",
   phoneError: "ስልኩ 0 የሚጀምር 10 አሃዞች መሆን አለበት",
-  tapMap: "ቦታን ለመምረጥ ካርታውን ይንኩ",
 };

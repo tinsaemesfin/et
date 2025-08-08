@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,6 +27,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Leaflet CSS in head to ensure styles load before map mounts */}
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-o9N1j8MkfF2zG32KXW9E4nSFB7xZf1su1t7qtJ6wG6E="
+          crossOrigin=""
+        />
+        {/* Initialize saved theme before hydration to avoid flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){try{var t=localStorage.getItem('theme');if(t==='dark'){document.documentElement.classList.add('dark');document.documentElement.classList.remove('light');}else if(t==='light'){document.documentElement.classList.add('light');document.documentElement.classList.remove('dark');}}catch(e){}})();",
+          }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -44,6 +61,7 @@ export default function RootLayout({
                 <a href="https://vercel.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 px-2 py-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10">
                   Deploy
                 </a>
+                <div className="ml-1 sm:ml-2"><ThemeToggle /></div>
               </nav>
             </div>
           </header>

@@ -16,6 +16,7 @@ export function getSql(): SqlClient | null {
 export async function ensureTables() {
   const client = getSql();
   if (!client) return;
+  // Neon serverless: one statement per query
   await client`
     create table if not exists reports (
       id text primary key,
@@ -25,13 +26,12 @@ export async function ensureTables() {
       neighborhood text,
       note text,
       contact text,
-      lat double precision,
-      lng double precision,
+
       created_at timestamptz not null
-    );
-    create index if not exists reports_created_idx on reports(created_at desc);
-    create index if not exists reports_geo_idx on reports(lat, lng);
+    )
   `;
+  await client`create index if not exists reports_created_idx on reports(created_at desc)`;
+
 }
 
 
