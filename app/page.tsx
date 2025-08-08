@@ -203,7 +203,7 @@ export default function Home() {
               <li className="text-sm opacity-70">{t.noReports}</li>
             )}
             {filtered.map((r) => (
-              <li key={r.id} className="rounded-xl border border-black/10 dark:border-white/15 p-3 bg-white/70 dark:bg-black/30">
+              <li key={r.id} className="rounded-xl border border-white/15 p-3 bg-black/30">
                 <div className="flex items-center justify-between gap-2">
                   <div className="inline-flex items-center gap-2">
                     {r.type === "power" ? (

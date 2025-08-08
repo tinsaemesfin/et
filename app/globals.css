@@ -1,10 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Default to dark tokens so the app looks dark even without the .dark class */
+  --background: #0a0a0a;
+  --foreground: #ededed;
   --color-brand: #1273eb; /* Ethiopian blue-inspired */
-  --header-bg: #ffffff;
+  --header-bg: #000000;
 }
 
 @theme inline {
@@ -14,6 +15,7 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Keep media query but it matches our default dark tokens now */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -23,10 +25,11 @@
 }
 
 /* Explicit theme classes override media preference */
+/* Make the light theme visually identical to dark */
 .light {
-  --background: #ffffff;
-  --foreground: #171717;
-  --header-bg: #ffffff;
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --header-bg: #000000;
 }
 
 .dark {

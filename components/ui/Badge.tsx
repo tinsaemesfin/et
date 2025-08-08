@@ -4,7 +4,7 @@ type Variant = "neutral" | "power" | "water";
 
 export function Badge({ variant = "neutral", children }: { variant?: Variant; children: React.ReactNode }) {
   const styles: Record<Variant, string> = {
-    neutral: "bg-black/5 dark:bg-white/15 text-foreground",
+    neutral: "bg-white/15 text-foreground",
     power: "bg-yellow-100 text-yellow-900 dark:bg-yellow-500/20 dark:text-yellow-300",
     water: "bg-blue-100 text-blue-900 dark:bg-blue-500/20 dark:text-blue-300",
   };
