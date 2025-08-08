@@ -58,9 +58,7 @@ export default function RootLayout({
                   <span className="w-1.5 h-1.5 rounded-full bg-[--color-brand] opacity-0 group-hover:opacity-100" />
                   About
                 </Link>
-                <a href="https://vercel.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 px-2 py-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10">
-                  Deploy
-                </a>
+                
                 <div className="ml-1 sm:ml-2"><ThemeToggle /></div>
               </nav>
             </div>
